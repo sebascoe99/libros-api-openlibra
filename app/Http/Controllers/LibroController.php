@@ -72,6 +72,39 @@ class LibroController extends Controller
         return $categorias = json_decode($response, TRUE);
     }
 
+    public function findBooksByIdCategorie(Request $request){
+        //return $request->id_categoria;
+
+        //$urlProducto = env('URL_PRODUCTO_MAGENTO');
+        $requestUrl = "https://www.etnassoft.com/api/v1/get/?category_id="."$request->id_categoria";
+        $headers = array(
+            'Content-Type: application/json',
+            //'Authorization: Bearer '.$token
+        );
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $requestUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+             CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_SSL_VERIFYPEER=> false,
+            CURLOPT_HTTPHEADER => $headers
+
+        ));
+
+        $response = curl_exec( $curl);
+        curl_close( $curl );
+
+        $libros = json_decode($response, TRUE);
+        $categorias = $this->getCategories();
+
+        return View::make('welcome')->with('libros', $libros)->with('categorias', $categorias)->render();
+    }
+
     /**
      * Show the form for creating a new resource.
      *

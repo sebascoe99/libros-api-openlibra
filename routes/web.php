@@ -19,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get("/", [LibroController::class, "index"]);
+Route::post('getBookByIdCategorie', [LibroController::class, "findBooksByIdCategorie"]);
